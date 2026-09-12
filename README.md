@@ -1,5 +1,5 @@
 ===================================================================
-     HODOE CLI - README
+                HODOE CLI - README
 ===================================================================
 
 HODOE CLI est l'outil officiel en ligne de commande pour publier et
