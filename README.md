@@ -6,6 +6,8 @@ HODOE CLI est l'outil officiel en ligne de commande pour publier et
 gérer vos binaires embarqués (ESP32, STM32, RISC-V, RP2350, ARM)
 directement depuis votre terminal vers le hub HODOE.
 
+Version stable : v0.4.1
+
 ------------------------------------------------------------------------
 1. INSTALLATION
 ------------------------------------------------------------------------
@@ -14,9 +16,11 @@ Via Cargo (Recommandé) :
   $ cargo install hodoe-cli
 
 Depuis le dépôt Git :
-  $ git clone https://github.com/jorgeandrecastro/hodoe-cli.git
-  $ cd hodoe-cli
-  $ cargo install --path .
+```bash
+  git clone https://github.com/jorgeandrecastro/hodoe-cli.git
+  cd hodoe-cli
+  cargo install --path .
+```
 
 ------------------------------------------------------------------------
 2. UTILISATION
@@ -26,18 +30,25 @@ Depuis le dépôt Git :
 Récupérez votre jeton utilisateur depuis la plateforme HODOE et
 authentifiez votre terminal :
 
-  $ hodoe login --token <VOTRE_USER_ID>
+```bash
+   hodoe login --token <VOTRE_USER_ID>
+```
 
 (Vos identifiants de session sont conservés dans ~/.hodoe/config.json)
 
 Étape 2 : Publication d'un binaire
 Rendez-vous dans le dossier de votre projet compilé et exécutez :
 
-  $ hodoe binary <NOM_PROJET> push --file <CHEMIN> --arch <ARCHITECTURE>
+
+```bash
+  hodoe binary <NOM_PROJET> push --file <CHEMIN> --arch <ARCHITECTURE>
+```
 
 Exemples :
-  $ hodoe binary firmware_capteur push --file ./build/firmware.uf2 --arch rp2350
-  $ hodoe binary weather_station push --file ./target/release/app.bin --arch esp32 --github https://github.com/user/repo --description "Station météo IoT"
+```bash
+  hodoe binary firmware_capteur push --file ./build/firmware.uf2 --arch rp2350
+  hodoe binary weather_station push --file ./target/release/app.bin --arch esp32 --github https://github.com/user/repo --description "Station météo IoT"
+```
 
 ------------------------------------------------------------------------
 3. OPTIONS DE LA COMMANDE PUSH
@@ -49,15 +60,18 @@ Exemples :
   -d, --description <DESC>  (Optionnel) Description synthétique du firmware
 
 ------------------------------------------------------------------------
-4. FONCTIONNALITÉS & ARCHITECTURE
+4. FONCTIONNALITÉS & ARCHITECTURE (v0.4.1 STABLE)
 ------------------------------------------------------------------------
 
 - Sécurité : Utilisation d'URLs d'envoi pré-signées (Presigned URLs)
-  générées par le backend Axum, sans stockage de clés maîtresses en local.
-- Téléversement en streaming direct vers Supabase Storage avec affichage
-  de la barre de progression en temps réel (indicatif).
-- Consommation mémoire minimale (Zero-RAM overhead) grâce à Tokio.
-- Validation instantanée des métadonnées sur le serveur backend Axum.
+  générées à la volée par le backend Axum, sans stockage de clés 
+  privées Supabase côté client.
+- Téléversement optimisé : Envoi physique direct et sécurisé en HTTP PUT 
+  vers Supabase Storage avec suivi de progression en temps réel (indicatif).
+- Consommation mémoire minimale (Zero-RAM overhead) grâce à l'écosystème 
+  Rust, Tokio et au streaming HTTP.
+- Enregistrement atomique : Enregistrement instantané et sécurisé des 
+  métadonnées du binaire sur la base de données de l'API HODOE.
 
 ------------------------------------------------------------------------
 5. LICENCE & AUTEUR
