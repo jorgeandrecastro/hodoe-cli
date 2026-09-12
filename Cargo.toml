@@ -1,12 +1,12 @@
 [package]
 name          = "hodoe-cli"
-version       = "0.1.0"
+version       = "0.2.0"
 edition       = "2024"
 authors       = ["Jorge Andre Castro <georgeandrec@gmail.com>"]
 license       = "GPL-2.0-or-later"
 description   = "CLI HODOE pour le déploiement de binaires embarqués sur microcontrôleurs."
 repository    = "https://github.com/jorgeandrecastro/hodoe-cli"
-documentation = "https://docs.rs/hodoe"
+documentation = "https://docs.rs/hodoe-cli"
 readme        = "README.md"
 keywords      = ["cli", "embedded", "firmware", "esp32", "deployment"]
 categories    = ["command-line-utilities", "embedded"]
@@ -20,7 +20,7 @@ autotests    = false
 autobenches  = false
 
 [[bin]]
-name = "hodoe-cli"
+name = "hodoe" # <--- CHANGER ICI : force le binaire à s'appeler "hodoe"
 path = "src/main.rs"
 
 [dependencies]
