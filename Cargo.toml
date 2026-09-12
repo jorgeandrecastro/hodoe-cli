@@ -1,6 +1,6 @@
 [package]
 name          = "hodoe-cli"
-version       = "0.2.0"
+version       = "0.3.0"
 edition       = "2024"
 authors       = ["Jorge Andre Castro <georgeandrec@gmail.com>"]
 license       = "GPL-2.0-or-later"
@@ -20,16 +20,19 @@ autotests    = false
 autobenches  = false
 
 [[bin]]
-name = "hodoe" # <--- CHANGER ICI : force le binaire à s'appeler "hodoe"
+name = "hodoe"
 path = "src/main.rs"
 
 [dependencies]
-clap        = { version = "4.6", features = ["derive"] }
-reqwest     = { version = "0.13", features = ["json"] }
-tokio       = { version = "1.53", features = ["full"] }
-serde       = { version = "1.0", features = ["derive"] }
-serde_json  = "1.0"
-dirs        = "7.0"
+clap       = { version = "4.6", features = ["derive"] }
+reqwest    = { version = "0.13", features = ["json", "stream"] }
+tokio      = { version = "1.53", features = ["full"] }
+tokio-util = { version = "0.7", features = ["io"] }
+serde      = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+dirs       = "7.0"
+indicatif  = "0.18"
+console    = "0.16"
 
 [profile.release]
 opt-level     = "z"     # Optimise la taille du binaire CLI
