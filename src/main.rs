@@ -69,6 +69,12 @@ struct Config {
     api_url: Option<String>,
 }
 
+#[derive(Deserialize)]
+struct PresignResponse {
+    upload_url: String,
+    public_url: String,
+}
+
 fn get_config_path() -> PathBuf {
     let mut path = dirs::home_dir().unwrap_or_else(|| PathBuf::from("."));
     path.push(".hodoe");
@@ -98,7 +104,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
     let mut config = load_config();
 
-    // URL distante exacte hébergée sur Render
     let api_url = config
         .api_url
         .clone()
@@ -146,12 +151,31 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .and_then(|n| n.to_str())
                     .unwrap_or("binary.bin");
 
+                let client = Client::new();
+
+                // 1. Obtention de l'URL d'upload temporaire (Presigned URL) auprès du backend Axum
+                println!("{}", style("🔑 Demande d'autorisation d'envoi au backend...").cyan());
+
+                let presign_res = client
+                    .post(format!("{}/api/v1/binaries/presign", api_url))
+                    .json(&serde_json::json!({ "filename": file_name }))
+                    .send()
+                    .await?;
+
+                if !presign_res.status().is_success() {
+                    let err = presign_res.text().await?;
+                    eprintln!("{}", style(format!("❌ Erreur d'autorisation backend : {}", err)).red());
+                    return Ok(());
+                }
+
+                let presign_data: PresignResponse = presign_res.json().await?;
+
+                // 2. Téléversement du binaire vers Supabase via la Presigned URL (requête PUT)
                 println!(
                     "{}",
-                    style(format!("📦 Préparation de l'envoi du binaire '{}' ({}, {} octets)...", name, arch, file_size)).blue().bold()
+                    style(format!("📦 Téléversement du binaire '{}' ({}, {} octets)...", name, arch, file_size)).blue().bold()
                 );
 
-                // Barre de progression élégante pour le terminal
                 let pb = ProgressBar::new(file_size);
                 pb.set_style(
                     ProgressStyle::default_bar()
@@ -159,24 +183,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .progress_chars("#>-"),
                 );
 
-                let supabase_upload_url = format!(
-                    "https://gkcpqctfndmlbfulqzfq.supabase.co/storage/v1/object/binaries/{}",
-                    file_name
-                );
-
-                let public_storage_url = format!(
-                    "https://gkcpqctfndmlbfulqzfq.supabase.co/storage/v1/object/public/binaries/{}",
-                    file_name
-                );
-
-                let client = Client::new();
-
-                // Streaming du binaire vers Supabase Storage
                 let stream = ReaderStream::new(tokio_file);
                 let body = reqwest::Body::wrap_stream(stream);
 
                 let upload_res = client
-                    .post(&supabase_upload_url)
+                    .put(&presign_data.upload_url)
                     .header("Content-Type", "application/octet-stream")
                     .body(body)
                     .send()
@@ -187,18 +198,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 } else {
                     pb.abandon();
                     let err = upload_res.text().await?;
-                    eprintln!("{}", style(format!("❌ Échec du téléversement Supabase : {}", err)).red());
+                    eprintln!("{}", style(format!("❌ Échec du téléversement : {}", err)).red());
                     return Ok(());
                 }
 
-                println!("{}", style("📡 Enregistrement des métadonnées sur l'API HODOE (Render)...").magenta().bold());
+                // 3. Enregistrement des métadonnées sur le backend Axum
+                println!("{}", style("📡 Enregistrement des métadonnées sur HODOE...").magenta().bold());
 
                 let payload = serde_json::json!({
                     "author_id": api_key,
                     "name": name,
                     "description": description,
                     "target_architecture": arch,
-                    "file_url": public_storage_url,
+                    "file_url": presign_data.public_url,
                     "github_url": github
                 });
 
@@ -211,7 +223,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if response.status().is_success() {
                     println!(
                         "{}",
-                        style(format!("🚀 Le binaire '{}' a été publié avec succès sur le hub HODOE !", name)).green().bold()
+                        style(format!("🚀 Le binaire '{}' a été publié avec succès !", name)).green().bold()
                     );
                 } else {
                     let err_msg = response.text().await?;

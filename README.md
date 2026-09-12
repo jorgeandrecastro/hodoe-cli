@@ -14,11 +14,9 @@ Via Cargo (Recommandé) :
   $ cargo install hodoe-cli
 
 Depuis le dépôt Git :
-```bash
- - $ git clone https://github.com/jorgeandrecastro/hodoe-cli.git
- - $ cd hodoe-cli
- - $ cargo install --path .
- ```
+  $ git clone https://github.com/jorgeandrecastro/hodoe-cli.git
+  $ cd hodoe-cli
+  $ cargo install --path .
 
 ------------------------------------------------------------------------
 2. UTILISATION
@@ -28,24 +26,18 @@ Depuis le dépôt Git :
 Récupérez votre jeton utilisateur depuis la plateforme HODOE et
 authentifiez votre terminal :
 
-```bash
   $ hodoe login --token <VOTRE_USER_ID>
-```
 
 (Vos identifiants de session sont conservés dans ~/.hodoe/config.json)
 
 Étape 2 : Publication d'un binaire
 Rendez-vous dans le dossier de votre projet compilé et exécutez :
 
-  ```bash
   $ hodoe binary <NOM_PROJET> push --file <CHEMIN> --arch <ARCHITECTURE>
-  ```
 
 Exemples :
-```bash
   $ hodoe binary firmware_capteur push --file ./build/firmware.uf2 --arch rp2350
   $ hodoe binary weather_station push --file ./target/release/app.bin --arch esp32 --github https://github.com/user/repo --description "Station météo IoT"
-  ```
 
 ------------------------------------------------------------------------
 3. OPTIONS DE LA COMMANDE PUSH
@@ -60,10 +52,12 @@ Exemples :
 4. FONCTIONNALITÉS & ARCHITECTURE
 ------------------------------------------------------------------------
 
+- Sécurité : Utilisation d'URLs d'envoi pré-signées (Presigned URLs)
+  générées par le backend Axum, sans stockage de clés maîtresses en local.
 - Téléversement en streaming direct vers Supabase Storage avec affichage
   de la barre de progression en temps réel (indicatif).
 - Consommation mémoire minimale (Zero-RAM overhead) grâce à Tokio.
-- Validation instantanée des métadonnées sur le serveur backend Axum/Render.
+- Validation instantanée des métadonnées sur le serveur backend Axum.
 
 ------------------------------------------------------------------------
 5. LICENCE & AUTEUR
