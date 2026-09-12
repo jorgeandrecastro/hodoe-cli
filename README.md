@@ -1,5 +1,5 @@
 ========================================================================
-                      HODOE CLI - README
+ # HODOE CLI - README
 ========================================================================
 
 HODOE CLI est l'outil officiel en ligne de commande pour publier et
@@ -7,7 +7,7 @@ gérer vos binaires embarqués (ESP32, STM32, RISC-V, ARM) directement
 depuis votre terminal vers la plateforme HODOE.
 
 ------------------------------------------------------------------------
-1. INSTALLATION
+# INSTALLATION
 ------------------------------------------------------------------------
 
 Via Cargo (Recommandé) :
@@ -17,7 +17,7 @@ Depuis le dépôt Git :
 $ cargo install --git https://github.com/jorgeandrecastro/hodoe-cli
 
 ------------------------------------------------------------------------
-2. UTILISATION
+# UTILISATION
 ------------------------------------------------------------------------
 
 Étape 1 : Authentification
@@ -36,7 +36,7 @@ $ hodoe binary firmware_capteur push --file ./build/firmware.bin --arch esp32
 $ hodoe binary kernel_riscv push --file ./target/release/app.elf --arch riscv --github https://github.com/user/repo
 
 ------------------------------------------------------------------------
-3. OPTIONS DISPONIBLES
+# OPTIONS DISPONIBLES
 ------------------------------------------------------------------------
 
 Commandes de publication :
@@ -46,7 +46,7 @@ Commandes de publication :
   -d, --description <DESC>  (Optionnel) Description du projet
 
 ------------------------------------------------------------------------
-4. LICENCE
+# LICENCE
 ------------------------------------------------------------------------
 
 Sous licence GPL-2.0-or-later.
