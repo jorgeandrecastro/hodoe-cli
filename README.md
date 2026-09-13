@@ -10,7 +10,7 @@ HODOE CLI permet aux développeurs de systèmes embarqués et aux Doers de
 publier et gérer leurs binaires compilés (ESP32, STM32, RISC-V, RP2350, 
 ARM...) directement depuis leur terminal vers le hub HODOE.
 
-Version actuelle : v0.5.0
+Version actuelle : v0.5.1
 
 ------------------------------------------------------------------------
 0. QUOI DE NEUF DANS LA v0.5.0 ?

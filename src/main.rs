@@ -10,7 +10,7 @@ use tokio_util::io::ReaderStream;
 #[derive(Parser)]
 #[command(
     name = "hodoe",
-    version = "0.5.0",
+    version ,
     about = "⚡ Outil CLI officiel pour le réseau Hodoe.fr (Preuve de travail & Binaires embarqués)",
     long_about = "HODOE CLI est l'outil en ligne de commande dédié aux développeurs de systèmes embarqués et Doers.\n\
                   Il vous permet de publier vos preuves de travail matérielles en déployant vos binaires compilés\n\
