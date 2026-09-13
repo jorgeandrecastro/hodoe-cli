@@ -2,18 +2,37 @@
 # HODOE CLI - README
 
 
-HODOE CLI est l'outil officiel en ligne de commande pour publier et
-gérer vos binaires embarqués (ESP32, STM32, RISC-V, RP2350, ARM)
-directement depuis votre terminal vers le hub HODOE.
+L'outil officiel en ligne de commande pour le réseau HODOE.
 
-Version stable : v0.4.1
+Plateforme web : https://hodoe.fr
+
+HODOE CLI permet aux développeurs de systèmes embarqués et aux Doers de 
+publier et gérer leurs binaires compilés (ESP32, STM32, RISC-V, RP2350, 
+ARM...) directement depuis leur terminal vers le hub HODOE.
+
+Version actuelle : v0.5.0
+
+------------------------------------------------------------------------
+0. QUOI DE NEUF DANS LA v0.5.0 ?
+------------------------------------------------------------------------
+
+- Lien vers la plateforme : Intégration directe du lien vers https://hodoe.fr 
+  dans le CLI et la documentation.
+- Support de --help enrichi : Description complète du rôle du CLI et 
+  de ses fonctionnalités directement accessible via `hodoe --help`.
+- Navigation optimisée : Amélioration de la gestion des routes web et 
+  retouche de l'interface graphique mobile/web.
+- Téléversement sécurisé : Gestion robuste des Presigned URLs et retours 
+  d'erreurs clairs lors de la publication des fichiers binaires.
 
 ------------------------------------------------------------------------
 1. INSTALLATION
 ------------------------------------------------------------------------
 
 Via Cargo (Recommandé) :
-  $ cargo install hodoe-cli
+```bash
+  cargo install hodoe-cli
+```
 
 Depuis le dépôt Git :
 ```bash
@@ -27,28 +46,27 @@ Depuis le dépôt Git :
 ------------------------------------------------------------------------
 
 Étape 1 : Authentification
-Récupérez votre jeton utilisateur depuis la plateforme HODOE et
-authentifiez votre terminal :
+Récupérez votre jeton utilisateur depuis votre espace sur https://hodoe.fr 
+et authentifiez votre terminal :
 
 ```bash
    hodoe login --token <VOTRE_USER_ID>
-```
+   ```
 
 (Vos identifiants de session sont conservés dans ~/.hodoe/config.json)
 
 Étape 2 : Publication d'un binaire
 Rendez-vous dans le dossier de votre projet compilé et exécutez :
-
-
-```bash
-  hodoe binary <NOM_PROJET> push --file <CHEMIN> --arch <ARCHITECTURE>
 ```
+
+  hodoe binary <NOM_PROJET> push --file <CHEMIN> --arch <ARCHITECTURE>
+  ```
 
 Exemples :
 ```bash
   hodoe binary firmware_capteur push --file ./build/firmware.uf2 --arch rp2350
   hodoe binary weather_station push --file ./target/release/app.bin --arch esp32 --github https://github.com/user/repo --description "Station météo IoT"
-```
+  ```
 
 ------------------------------------------------------------------------
 3. OPTIONS DE LA COMMANDE PUSH
@@ -60,7 +78,7 @@ Exemples :
   -d, --description <DESC>  (Optionnel) Description synthétique du firmware
 
 ------------------------------------------------------------------------
-4. FONCTIONNALITÉS & ARCHITECTURE (v0.4.1 STABLE)
+4. FONCTIONNALITÉS & ARCHITECTURE
 ------------------------------------------------------------------------
 
 - Sécurité : Utilisation d'URLs d'envoi pré-signées (Presigned URLs)
@@ -71,12 +89,14 @@ Exemples :
 - Consommation mémoire minimale (Zero-RAM overhead) grâce à l'écosystème 
   Rust, Tokio et au streaming HTTP.
 - Enregistrement atomique : Enregistrement instantané et sécurisé des 
-  métadonnées du binaire sur la base de données de l'API HODOE.
+  métadonnées du binaire sur la base de données de l'API HODOE,
+  consultables sur https://hodoe.fr.
 
 ------------------------------------------------------------------------
 5. LICENCE & AUTEUR
 ------------------------------------------------------------------------
 
-Sous licence GPL-2.0-or-later.
-Développé par Jorge Andre Castro <georgeandrec@gmail.com>.
+Licence : GPL-2.0-or-later
+Auteur  : Jorge Andre Castro <georgeandrec@gmail.com>
+Site    : https://hodoe.fr
 ========================================================================

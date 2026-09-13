@@ -1,6 +1,6 @@
 [package]
 name          = "hodoe-cli"
-version       = "0.4.1"
+version       = "0.5.0"
 edition       = "2024"
 authors       = ["Jorge Andre Castro <georgeandrec@gmail.com>"]
 license       = "GPL-2.0-or-later"

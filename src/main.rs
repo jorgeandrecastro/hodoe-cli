@@ -10,9 +10,11 @@ use tokio_util::io::ReaderStream;
 #[derive(Parser)]
 #[command(
     name = "hodoe",
-    version = "0.2.0",
-    about = "Outil en ligne de commande HODOE pour le déploiement de binaires embarqués",
-    long_about = None
+    version = "0.5.0",
+    about = "⚡ Outil CLI officiel pour le réseau Hodoe.fr (Preuve de travail & Binaires embarqués)",
+    long_about = "HODOE CLI est l'outil en ligne de commande dédié aux développeurs de systèmes embarqués et Doers.\n\
+                  Il vous permet de publier vos preuves de travail matérielles en déployant vos binaires compilés\n\
+                  (.uf2, .bin, .hex...) directement sur la plateforme Hodoe.fr."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -21,9 +23,9 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Connexion à votre compte HODOE via votre jeton utilisateur
+    /// Connecter votre machine à votre compte HODOE avec votre jeton
     Login {
-        /// Votre jeton d'authentification utilisateur HODOE
+        /// Votre jeton d'authentification (User ID) HODOE
         #[arg(short, long)]
         token: String,
 
@@ -31,9 +33,9 @@ enum Commands {
         #[arg(short, long)]
         url: Option<String>,
     },
-    /// Gestion et publication des binaires embarqués
+    /// Publier et gérer vos projets et binaires embarqués
     Binary {
-        /// Nom du projet ou du fichier binaire
+        /// Nom du projet ou du binaire
         name: String,
 
         #[command(subcommand)]
@@ -43,21 +45,21 @@ enum Commands {
 
 #[derive(Subcommand)]
 enum BinaryActions {
-    /// Déployer et publier un binaire compilé sur le hub HODOE
+    /// Téléverser et publier un binaire compilé sur le hub HODOE
     Push {
-        /// Chemin d'accès au fichier binaire (.bin, .hex, .uf2, etc.)
+        /// Chemin vers le fichier binaire (.bin, .hex, .uf2, etc.)
         #[arg(short, long)]
         file: PathBuf,
 
-        /// Architecture cible (ex: esp32, stm32, riscv, rp2350)
+        /// Architecture microcontrôleur cible (ex: rp2350, esp32, stm32, riscv)
         #[arg(short, long)]
         arch: String,
 
-        /// Lien vers le dépôt GitHub source (optionnel)
+        /// URL du dépôt GitHub source (optionnel)
         #[arg(short, long)]
         github: Option<String>,
 
-        /// Description détaillée du binaire (optionnel)
+        /// Description détaillée du binaire ou des fonctionnalités (optionnel)
         #[arg(short, long)]
         description: Option<String>,
     },
@@ -194,7 +196,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 if upload_res.status().is_success() {
-                    pb.finish_with_message("✨ Téléversement physique vers Supabase réussi !");
+                    pb.finish_with_message("✨ Téléversement physique réussi !");
                 } else {
                     pb.abandon();
                     let err = upload_res.text().await?;
@@ -223,7 +225,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if response.status().is_success() {
                     println!(
                         "{}",
-                        style(format!("🚀 Le binaire '{}' a été publié avec succès !", name)).green().bold()
+                        style(format!("🚀 Le binaire '{}' a été publié avec succès sur HODOE !", name)).green().bold()
                     );
                 } else {
                     let err_msg = response.text().await?;
