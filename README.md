@@ -13,7 +13,7 @@ ARM...) directement depuis leur terminal vers le hub HODOE.
 Version actuelle : v0.5.1
 
 ------------------------------------------------------------------------
-0. QUOI DE NEUF DANS LA v0.5.0 ?
+0. QUOI DE NEUF DANS LA v0.5.1 ?
 ------------------------------------------------------------------------
 
 - Lien vers la plateforme : Intégration directe du lien vers https://hodoe.fr 
